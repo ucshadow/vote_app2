@@ -1,8 +1,12 @@
 doctype html
-html
+html(ng-app="pollApp")
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css')
-  body
+    script(src="/modules/angular/angular.min.js")
+    // script(src="/modules/jquery/src/jquery.js")
+    script(src="/controllers/main.js")
+  body(ng-controller="bodyController")
+    p {{ test }}
     block content

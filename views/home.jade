@@ -1,15 +1,19 @@
 extends layout
 
 block content
-	div.container
-		div.row
-			div.col-sm-6.col-md-4.col-md-offset-4
-				#user
-					h1.text-center.login-title Welcome #{user.firstName}. Check your details below:
-						div.signup-wall
-							ul.user-details
-								li Username ---> #{user.username}
-								li Email    ---> #{user.email}
-								li First Name ---> #{user.firstName} 
-								li Last Name ---> #{user.lastName}
-						a(href='/signout', class='text-center new-account') Sign Out
+    div.container
+        div.row
+            div.col-sm-6.col-md-4.col-md-offset-4
+                #user
+                    h1.text-center.login-title(id='title') Hello #{user.username}
+                    form(class='form-poll' ng-controller='formPoll')
+                        input(type='text', name='poll_title', id = "poll_title", class='poll_title', placeholder='Best Movie',
+                        required, autofocus ng-keydown="keyPress($event);")
+                        p {{ r }}
+                    form(class='poll_options', ng-controller='pollOptions', required ng-keydown="keyPress($event);",
+                    id='poll_id')
+                        input(type='text', name='poll_option0', class='poll_option', id='p0',
+                        placeholder='option 0')
+                a(href='/signout', class='text-center new-account') Sign Out
+                button(class='submit_poll' ng-click='submit_poll()') Submit Poll
+                button(class='submit_poll' ng-click='query_poll()') Query Poll

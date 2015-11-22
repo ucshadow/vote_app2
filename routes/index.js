@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose');
+var Poll = require('../models/poll_db');
+// mongoose.connect('mongodb://localhost/vote');
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -9,7 +12,7 @@ var isAuthenticated = function (req, res, next) {
 		return next();
 	// if the user is not authenticated then redirect him to the login page
 	res.redirect('/');
-}
+};
 
 module.exports = function(passport){
 
@@ -25,6 +28,7 @@ module.exports = function(passport){
 		failureRedirect: '/',
 		failureFlash : true  
 	}));
+
 
 	/* GET Registration Page */
 	router.get('/signup', function(req, res){
@@ -50,7 +54,7 @@ module.exports = function(passport){
 	});
 
 	return router;
-}
+};
 
 
 

@@ -4,17 +4,30 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var Poll;
 
 var dbConfig = require('./db');
 var mongoose = require('mongoose');
 // Connect to DB
 mongoose.connect(dbConfig.url);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function (){
+    var P = new mongoose.Schema({
+        author: String,
+        title: String,
+        options: Array
+    });
+    Poll = mongoose.model('Poll', P);
+});
 
 var app = express();
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+app.use("/modules", express.static('./node_modules'));
+app.use("/controllers", express.static('./controllers'));
 
 app.use(favicon());
 app.use(logger('dev'));
@@ -23,35 +36,52 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Configuring Passport
 var passport = require('passport');
 var expressSession = require('express-session');
-// TODO - Why Do we need this key ?
-app.use(expressSession({secret: 'mySecretKey'}));
+app.use(expressSession({secret: 'AFAKAYU'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
- // Using the flash middleware provided by connect-flash to store messages in session
- // and displaying in templates
 var flash = require('connect-flash');
 app.use(flash());
 
-// Initialize Passport
 var initPassport = require('./passport/init');
 initPassport(passport);
 
 var routes = require('./routes/index')(passport);
 app.use('/', routes);
 
-/// catch 404 and forward to error handler
+app.post('/submit_poll', function(a){
+    console.log(a.body);
+    var fresh = new Poll({
+            author: a.body.author,
+            title: a.body.title,
+            options: a.body.options
+        });
+    console.log('-------------------------------JUST IN--------------------------');
+    console.log(fresh);
+    fresh.save(function(err, fresh) {
+        if (err) return console.error(err);
+        console.dir(fresh);
+    });
+});
+
+app.post('/query_polls', function(req, res){
+    console.log('------------------------REQ FROM QUERY-------------------------');
+    console.log(req.body.data);
+    var author_ = req.body.data;
+    var r = Poll.find({ author: author_}).toArray();
+    console.log('FOUND----------------------------------------------------->');
+    console.log(r);
+    res.send(r)
+});
+
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
-// development error handler
-// will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
@@ -61,5 +91,7 @@ if (app.get('env') === 'development') {
         });
     });
 }
-
+app.listen(8080, function(){
+    console.log('LIVE');
+});
 module.exports = app;
