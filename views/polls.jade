@@ -1,3 +1,21 @@
-//
-   Created by SHADOW on 23-Nov-15.
+extends layout
+
+block content
+    div(ng-controller='pollController')
+        div.container
+            div.row
+                div.col-sm-6.col-md-4.col-md-offset-4
+                    p A poll by: #{user}
+                    p Poll: #{name}
+                    div(id='ul_ul')
+                        each val in options
+                            div(class='poll_container', ng-click="vote($event)", id="poll_")
+                                span(class='checkbox__', id = val)
+                                span(class='option_row', id='option_row')= val
+                    button(class='submit_poll' ng-click='submit_vote()') Vote
+                p(id='alerts') ---
+        canvas(id="pie" class="chart chart-pie"
+                chart-data="data" chart-labels="labels")
+
+
 
