@@ -54,12 +54,12 @@ ang.controller('bodyController', function($scope, $http){
         var pollOpt = document.getElementById('poll_id').childNodes;
         pollData.author = author.split(' ')[1];
         pollData.title = title;
-        pollData.options = [];
+        pollData.opts = [];
         for(var i = 0; i < pollOpt.length; i++){
             var dic = {};
             dic['score'] = 0;
             dic['custom_id'] = pollOpt[i].value;
-            pollData.options.push(dic);
+            pollData.opts.push(dic);
         }
         //console.log('-----------------Sending Poll Data --------------');
         //console.log(pollData);
@@ -72,7 +72,7 @@ ang.controller('bodyController', function($scope, $http){
         var name = {data: author.split(' ')[1]};
         $http.post('/query_polls', name).success(function(data){
             //console.log('received data:');
-            //console.log(data)
+            console.log(data)
         })
     }
 });
@@ -125,9 +125,9 @@ ang.controller('pollController', function($scope, $http, socket){
     $scope.data = pie_data;
 
     socket.on('graphData', function(d){
-        //console.log('data from socket');
-        //console.log(d);
-        var data = d.options;
+        console.log('data from socket');
+        console.log(d);
+        var data = d.opts;
         var page_id = d._id;
         if(window.location.pathname.substr(1) === page_id) {  // reload protection between graphs
             if (labels.length === 0) {

@@ -58,7 +58,7 @@ module.exports = function(passport){
     var fresh = new Poll({
             author: a.body.author,
             title: a.body.title,
-            options: a.body.options
+            opts: a.body.opts
         });
     console.log('-------------------------------JUST IN--------------------------');
     console.log(fresh);
@@ -91,7 +91,7 @@ module.exports = function(passport){
         var id__ = option.poll_id;
         var name = option.choice;
         var new_dict = {};
-        var inc = 'options.$.' + name;
+        var inc = 'opts.$.' + name;
         new_dict[inc] = 1;
         Poll.findOne({_id: id__}, function(err, data){
             if(err){
@@ -100,7 +100,7 @@ module.exports = function(passport){
             } else {
                 console.log('------------------------------------ RESULT OF NAME Q ------------------------------');
                 console.log(data);
-                Poll.update({_id: id__, 'options.custom_id': name}, {$inc: {'options.$.score': 1}}, function(err, res){
+                Poll.update({_id: id__, 'opts.custom_id': name}, {$inc: {'opts.$.score': 1}}, function(err, res){
                     if(err){
                         console.log('ERROR');
                         console.log(err)
@@ -128,9 +128,9 @@ module.exports = function(passport){
                 throw(err);
             }
             var names = [];
-            for(var i = 0; i < post.options.length; i++){
+            for(var i = 0; i < post.opts.length; i++){
                 //names.push(Object.keys(post.options[i]));
-                names.push(post.options[i].custom_id);
+                names.push(post.opts[i].custom_id);
             }
             return res.render('polls', {user: post.author, name: post.title, options: names});
       });

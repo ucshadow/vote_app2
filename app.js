@@ -8,25 +8,23 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var favicon = require('static-favicon');
 // var s = require('./models/poll_db');
-// var Poll;
 
 
 var dbConfig = require('./db');
 var mongoose = require('mongoose');
 // Connect to DB
-mongoose.connect(dbConfig.url);
+mongoose.connect('mongodb://localhost/vote');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function (){
-    var P = new mongoose.Schema({
-        author: String,
-        title: String,
-        options: {name: String,
-                  score: Number},
-        result: Array
-    });
-    Poll = mongoose.model('Poll', P);
+
+var P = new mongoose.Schema({
+    author: String,
+    title: String,
+    opts: {name: String,
+              score: Number},
+    result: Array
 });
+var Poll = mongoose.model('Poll', P);
 
 
 function q(x){
