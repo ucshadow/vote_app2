@@ -53,19 +53,38 @@ module.exports = function(passport){
 		res.redirect('/');
 	});
 
-    router.post('/submit_poll', function(a){
+    router.post('/get_my_polls', function(req, res){
+        //console.log('------------------------------------------ LOGGING GET MY POLLS ------------------------------');
+        //console.log(req);
+            if(!req.user){
+                return res.send('Please Login');
+            }
+            if(req.user){
+                Poll.find({ author: req.user.username}, function(err, data){
+                    if(err){
+                        console.log(err);
+                        return res.send('Database Error');
+                    }
+                    return res.jsonp(data);
+                })
+            }
+
+    });
+
+    router.post('/submit_poll', function(a, res){
     console.log(a.body);
     var fresh = new Poll({
             author: a.body.author,
             title: a.body.title,
             opts: a.body.opts
         });
-    console.log('-------------------------------JUST IN--------------------------');
-    console.log(fresh);
-    fresh.save(function(err, fresh) {
-        if (err) return console.error(err);
-        console.dir(fresh);
-    });
+        console.log('-------------------------------JUST IN--------------------------');
+        console.log(fresh);
+        fresh.save(function(err, fresh) {
+            if (err) return console.error(err);
+            console.dir(fresh);
+        });
+        return res.sendStatus(200);
     });
 
     router.post('/query_polls', function(req, res){
@@ -84,10 +103,10 @@ module.exports = function(passport){
     });
 
     router.post('/submit_poll_vote', function(req, res, next){
-        console.log('------------------------REQ FROM SUBMIT-------------------------');
+        //console.log('------------------------REQ FROM SUBMIT-------------------------');
 
         var option = req.body.data;
-        console.log(option);
+        //console.log(option);
         var id__ = option.poll_id;
         var name = option.choice;
         var new_dict = {};
@@ -105,8 +124,8 @@ module.exports = function(passport){
                         console.log('ERROR');
                         console.log(err)
                     } else {
-                        console.log('SUCCESS');
-                        console.log(res);
+                        //console.log('SUCCESS');
+                        //console.log(res);
                     }
                 })
 

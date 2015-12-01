@@ -32,3 +32,8 @@ script.
                             tCtx.fillText(l[x], 2, 20);
                             imageElem.src = tCtx.canvas.toDataURL();
                         }
+
+
+0 {"title":"Best Apink Member","scores":["EunJi: 6","Bomi: 3","Chorong: 2","NaEun: 1","Hayoung: 2","NamJoo: 1"]}
+
+1 {"title":"Best Girls Day Member","scores":["Minah: 0","Sojin: 0","Yura: 0","Hyeri: 0"]}

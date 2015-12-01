@@ -13,9 +13,19 @@ block content
                                 span(class='checkbox__', id = val)
                                 span(class='option_row', id='option_row')= val
                     button(class='submit_poll' ng-click='submit_vote()') Vote
+                    button(class='submit_poll' ng-click='get_my_polls()') Get My Polls
                 p(id='alerts') ---
-        canvas(id="pie" class="chart chart-pie"
-                chart-data="data" chart-labels="labels")
+        div(class='pie_container')
+            canvas(id="pie" class="chart chart-pie"
+                    chart-data="data" chart-labels="labels")
+        div(class='all_polls', ng-controller='Cntl')
+            ul
+                li(ng-repeat='item in data')
+                    a(href='{{item.id}}') {{item.title}}
+                    ul
+                        li(ng-repeat='child in item.scores') {{child}}
+                            ul
+
 
 
 

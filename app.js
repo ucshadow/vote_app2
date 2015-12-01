@@ -13,7 +13,7 @@ var favicon = require('static-favicon');
 var dbConfig = require('./db');
 var mongoose = require('mongoose');
 // Connect to DB
-mongoose.connect('mongodb://localhost/vote');
+mongoose.connect(dbConfig.url);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
